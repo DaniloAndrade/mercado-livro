@@ -1,1 +1,16 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:mysql://localhost:3308/mercadolivro?createDatabaseIfNotExist=true
+    username: root
+    password: root
 
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+logging:
+  level:
+    sun.rmi.transport: ERROR
+    org.springframework.web.client: ERROR
