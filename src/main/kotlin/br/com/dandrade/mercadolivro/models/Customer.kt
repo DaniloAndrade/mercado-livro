@@ -19,8 +19,8 @@ data class Customer(
 ) {
 
 
-    fun delete() {
-        this.status = CustomerStatus.DELETADO
+    fun inativar() {
+        this.status = CustomerStatus.INATIVO
     }
 
     override fun equals(other: Any?): Boolean {

@@ -42,7 +42,7 @@ class CustomerService(
     fun delete(id: Long) {
         val customer = repository.findByIdOrNull(id)
 
-        customer?.delete()
+        customer?.inativar()
         customer?.also {
             bookDeleter.deleteByCustomer(it.id!!)
             repository.save(it)
