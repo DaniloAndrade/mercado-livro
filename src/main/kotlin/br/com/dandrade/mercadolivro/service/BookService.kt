@@ -3,6 +3,8 @@ package br.com.dandrade.mercadolivro.service
 import br.com.dandrade.mercadolivro.enums.BookStatus
 import br.com.dandrade.mercadolivro.models.Book
 import br.com.dandrade.mercadolivro.repository.BookRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -11,8 +13,8 @@ class BookService(
 ) : BookDeleterByCustomer {
 
 
-    fun findAll(): List<Book> {
-        return repository.findAll().toList()
+    fun findAll(pageable: Pageable): Page<Book> {
+        return repository.findAll(pageable)
     }
 
 
@@ -20,8 +22,8 @@ class BookService(
         return repository.save(book)
     }
 
-    fun findActives(): List<Book> {
-        return repository.findByStatus(BookStatus.ATIVO)
+    fun findActives(pageable: Pageable): Page<Book> {
+        return repository.findByStatus(BookStatus.ATIVO, pageable)
     }
 
     fun findById(id: Long): Book {

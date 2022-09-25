@@ -2,6 +2,8 @@ package br.com.dandrade.mercadolivro.service
 
 import br.com.dandrade.mercadolivro.models.Customer
 import br.com.dandrade.mercadolivro.repository.CustomerRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -12,11 +14,11 @@ class CustomerService(
 ) {
 
 
-    fun getAll(name: String?): List<Customer> {
+    fun getAll(name: String?, pageable: Pageable): Page<Customer> {
         name?.let { n ->
-            return repository.findByNameContaining(n)
+            return repository.findByNameContaining(n, pageable)
         }
-        return repository.findAll().toList()
+        return repository.findAll(pageable)
     }
 
 

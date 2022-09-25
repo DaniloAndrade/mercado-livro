@@ -6,6 +6,9 @@ import br.com.dandrade.mercadolivro.controller.output.CustomerResponse
 import br.com.dandrade.mercadolivro.extension.toCustomer
 import br.com.dandrade.mercadolivro.extension.toResponse
 import br.com.dandrade.mercadolivro.service.CustomerService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -17,8 +20,11 @@ class CustomerController(
 
 
     @GetMapping
-    fun getAll(@RequestParam name: String?): List<CustomerResponse> {
-        return service.getAll(name)
+    fun getAll(
+        @RequestParam name: String?,
+        @PageableDefault(size = 5, page = 0) pageable: Pageable
+    ): Page<CustomerResponse> {
+        return service.getAll(name, pageable)
             .map { it.toResponse() }
     }
 

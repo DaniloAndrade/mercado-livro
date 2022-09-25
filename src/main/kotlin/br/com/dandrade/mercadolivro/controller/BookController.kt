@@ -8,6 +8,9 @@ import br.com.dandrade.mercadolivro.extension.toResponse
 import br.com.dandrade.mercadolivro.models.Book
 import br.com.dandrade.mercadolivro.search.CustomerSearch
 import br.com.dandrade.mercadolivro.service.BookService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -20,12 +23,12 @@ class BookController(
 
 
     @GetMapping
-    fun findAll(): List<BookResponse> =
-        service.findAll().map { it.toResponse() }
+    fun findAll(@PageableDefault(page = 0, size = 10) pageable: Pageable): Page<BookResponse> =
+        service.findAll(pageable).map { it.toResponse() }
 
     @GetMapping("/active")
-    fun findActives(): List<BookResponse> =
-        service.findActives().map { it.toResponse() }
+    fun findActives(@PageableDefault(page = 0, size = 10) pageable: Pageable): Page<BookResponse> =
+        service.findActives(pageable).map { it.toResponse() }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
