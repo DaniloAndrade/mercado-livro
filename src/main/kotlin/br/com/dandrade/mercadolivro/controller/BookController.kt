@@ -2,7 +2,9 @@ package br.com.dandrade.mercadolivro.controller
 
 import br.com.dandrade.mercadolivro.controller.input.BookRequest
 import br.com.dandrade.mercadolivro.controller.input.PutBookRequest
+import br.com.dandrade.mercadolivro.controller.output.BookResponse
 import br.com.dandrade.mercadolivro.extension.toBook
+import br.com.dandrade.mercadolivro.extension.toResponse
 import br.com.dandrade.mercadolivro.models.Book
 import br.com.dandrade.mercadolivro.search.CustomerSearch
 import br.com.dandrade.mercadolivro.service.BookService
@@ -18,12 +20,12 @@ class BookController(
 
 
     @GetMapping
-    fun findAll(): List<Book> =
-        service.findAll()
+    fun findAll(): List<BookResponse> =
+        service.findAll().map { it.toResponse() }
 
     @GetMapping("/active")
-    fun findActives(): List<Book> =
-        service.findActives()
+    fun findActives(): List<BookResponse> =
+        service.findActives().map { it.toResponse() }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,8 +34,8 @@ class BookController(
     }
 
     @GetMapping("/{id}")
-    fun getCustomer(@PathVariable id: Long): Book {
-        return service.findById(id)
+    fun getCustomer(@PathVariable id: Long): BookResponse {
+        return service.findById(id).toResponse()
     }
 
 
@@ -46,7 +48,7 @@ class BookController(
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
-        service.delete(id)
+        service.cancelar(id)
     }
 
 

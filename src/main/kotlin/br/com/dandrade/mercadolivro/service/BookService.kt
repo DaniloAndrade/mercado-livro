@@ -28,9 +28,9 @@ class BookService(
         return repository.findById(id).orElseThrow()
     }
 
-    fun delete(id: Long) {
+    fun cancelar(id: Long) {
         val book = findById(id)
-        book.delete()
+        book.cancelar()
         repository.save(book)
     }
 
