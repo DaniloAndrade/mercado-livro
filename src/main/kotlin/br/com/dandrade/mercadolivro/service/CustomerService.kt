@@ -1,5 +1,7 @@
 package br.com.dandrade.mercadolivro.service
 
+import br.com.dandrade.mercadolivro.controller.exception.NotFoundException
+import br.com.dandrade.mercadolivro.enums.Errors
 import br.com.dandrade.mercadolivro.models.Customer
 import br.com.dandrade.mercadolivro.repository.CustomerRepository
 import org.springframework.data.domain.Page
@@ -28,7 +30,8 @@ class CustomerService(
 
 
     fun getCustomer(id: Long): Customer {
-        return repository.findById(id).orElseThrow()
+        return repository.findById(id)
+            .orElseThrow { NotFoundException(Errors.ML0201.message.format(id), Errors.ML0201.code) }
     }
 
 

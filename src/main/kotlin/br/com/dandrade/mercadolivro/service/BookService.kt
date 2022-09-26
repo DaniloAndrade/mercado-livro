@@ -1,6 +1,8 @@
 package br.com.dandrade.mercadolivro.service
 
+import br.com.dandrade.mercadolivro.controller.exception.NotFoundException
 import br.com.dandrade.mercadolivro.enums.BookStatus
+import br.com.dandrade.mercadolivro.enums.Errors
 import br.com.dandrade.mercadolivro.models.Book
 import br.com.dandrade.mercadolivro.repository.BookRepository
 import org.springframework.data.domain.Page
@@ -27,7 +29,8 @@ class BookService(
     }
 
     fun findById(id: Long): Book {
-        return repository.findById(id).orElseThrow()
+        return repository.findById(id)
+            .orElseThrow { NotFoundException(Errors.ML0101.message.format(id), Errors.ML0101.code) }
     }
 
     fun cancelar(id: Long) {
