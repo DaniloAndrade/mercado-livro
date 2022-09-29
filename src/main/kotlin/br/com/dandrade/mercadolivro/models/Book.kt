@@ -1,6 +1,8 @@
 package br.com.dandrade.mercadolivro.models
 
+import br.com.dandrade.mercadolivro.controller.exception.BadRequestException
 import br.com.dandrade.mercadolivro.enums.BookStatus
+import br.com.dandrade.mercadolivro.enums.Errors
 import org.hibernate.Hibernate
 import java.math.BigDecimal
 import javax.persistence.*
@@ -36,11 +38,19 @@ data class Book(
     var status: BookStatus? = null
         set(value) {
             if (field == BookStatus.CANCELADO || field == BookStatus.DELETADO) {
-                throw Exception("Livro com status ${field?.name} não deve mudar de status!")
+                throw BadRequestException(Errors.ML0102.message.format(field?.name), Errors.ML0102.code)
             }
             field = value
         }
 
+
+    fun delete() {
+        this.status = BookStatus.DELETADO
+    }
+
+    fun cancelar() {
+        this.status = BookStatus.CANCELADO
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -51,13 +61,5 @@ data class Book(
     }
 
     override fun hashCode(): Int = javaClass.hashCode()
-
-    fun delete() {
-        this.status = BookStatus.DELETADO
-    }
-
-    fun cancelar() {
-        this.status = BookStatus.CANCELADO
-    }
 
 }

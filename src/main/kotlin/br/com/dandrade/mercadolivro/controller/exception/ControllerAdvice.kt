@@ -35,4 +35,16 @@ class ControllerAdvice {
             errors = null
         )
     }
+
+    @ExceptionHandler(BadRequestException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    fun handleBadRequestException(ex: BadRequestException, request: WebRequest): ErrorResponse {
+        return ErrorResponse(
+            httpCode = HttpStatus.BAD_REQUEST.value(),
+            message = ex.message ?: "Erro desconhecido",
+            internalErrorCode = ex.errorCode,
+            errors = null
+        )
+    }
 }
