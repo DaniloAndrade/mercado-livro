@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface CustomerRepository : JpaRepository<Customer, Long>, CustomerSearch {
 
+    fun existsByEmail(email: String): Boolean
+
+
     fun findByNameContaining(name: String, pageable: Pageable): Page<Customer>
 
     override fun searchById(id: Long): Customer {

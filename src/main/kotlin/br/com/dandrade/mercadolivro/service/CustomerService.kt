@@ -1,7 +1,7 @@
 package br.com.dandrade.mercadolivro.service
 
 import br.com.dandrade.mercadolivro.controller.exception.NotFoundException
-import br.com.dandrade.mercadolivro.enums.Errors
+import br.com.dandrade.mercadolivro.enums.Errors.ML0201
 import br.com.dandrade.mercadolivro.models.Customer
 import br.com.dandrade.mercadolivro.repository.CustomerRepository
 import org.springframework.data.domain.Page
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 class CustomerService(
     val repository: CustomerRepository,
     val bookDeleter: BookDeleterByCustomer
-) {
+) : CustumerEmailAvailable {
 
 
     fun getAll(name: String?, pageable: Pageable): Page<Customer> {
@@ -31,16 +31,20 @@ class CustomerService(
 
     fun getCustomer(id: Long): Customer {
         return repository.findById(id)
-            .orElseThrow { NotFoundException(Errors.ML0201.message.format(id), Errors.ML0201.code) }
+            .orElseThrow { NotFoundException(ML0201.message.format(id), ML0201.code) }
     }
 
 
     fun updateCustomer(customer: Customer) {
 
-        if (repository.existsById(customer.id!!)) {
-            throw Exception()
+        val customerOptional = repository.findById(customer.id!!)
+        if (customerOptional.isEmpty) {
+            throw NotFoundException(ML0201.message.format(customer.id), ML0201.code)
         }
-        repository.save(customer)
+        val toSaveCustomer = customerOptional.get()
+            .let { it.copy(name = customer.name, email = customer.email) }
+
+        repository.save(toSaveCustomer)
 
     }
 
@@ -52,5 +56,9 @@ class CustomerService(
             bookDeleter.deleteByCustomer(it.id!!)
             repository.save(it)
         }
+    }
+
+    override fun emailAvailable(email: String): Boolean {
+        return !repository.existsByEmail(email)
     }
 }

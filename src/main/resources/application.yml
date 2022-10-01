@@ -15,3 +15,5 @@ logging:
   level:
     sun.rmi.transport: ERROR
     org.springframework.web.client: ERROR
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
